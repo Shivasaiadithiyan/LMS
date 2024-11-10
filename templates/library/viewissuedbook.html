@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Issued Books</title>
+    <style>
+        table.redTable {
+            border: 2px solid #A40808;
+            background-color: #EEE7DB;
+            width: 100%;
+            text-align: center;
+            border-collapse: collapse;
+        }
+        table.redTable td, table.redTable th {
+            border: 1px solid #AAAAAA;
+            padding: 3px 2px;
+        }
+        table.redTable tbody td {
+            font-size: 13px;
+        }
+        table.redTable tr:nth-child(even) {
+            background: #F5C8BF;
+        }
+        table.redTable thead {
+            background: #A40808;
+        }
+        table.redTable thead th {
+            font-size: 19px;
+            font-weight: bold;
+            color: #FFFFFF;
+            text-align: center;
+            border-left: 2px solid #A40808;
+        }
+        table.redTable thead th:first-child {
+            border-left: none;
+        }
+        table.redTable tfoot {
+            font-size: 13px;
+            font-weight: bold;
+            color: #FFFFFF;
+            background: #A40808;
+        }
+        table.redTable tfoot td {
+            font-size: 13px;
+        }
+        table.redTable tfoot .links {
+            text-align: right;
+        }
+        table.redTable tfoot .links a {
+            display: inline-block;
+            background: #FFFFFF;
+            color: #A40808;
+            padding: 2px 8px;
+            border-radius: 5px;
+        }
+        .search-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .search-container input[type="text"] {
+            padding: 8px;
+            width: 250px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .search-container button {
+            padding: 8px 16px;
+            font-size: 16px;
+            background-color: #A40808;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .search-container button:hover {
+            background-color: #880707;
+        }
+    </style>
+</head>
+<body>
+    {% include "library/navbaradmin.html" %}
+    <br><br>
+    <h3 class="p-3 mb-2 bg-primary text-white" style="font-size: 50px; text-align: center; margin-bottom: 0px;">Issued Books to Students</h3>
+
+    <div class="search-container">
+        <form method="get" action="/viewissuedbook">
+            <input type="text" name="search" placeholder="Search by Enrollment Number" value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    {% if issued_books %}
+    <table class="redTable">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Student Enrollment</th>
+                <th>Book Name</th>
+                <th>Book Author</th>
+                <th>Issue Date</th>
+                <th>Expiry Date</th>
+                <th>Fine</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <td colspan="7">
+                    <div class="links"></div>
+                </td>
+            </tr>
+        </tfoot>
+        <tbody>
+            {% for book in issued_books %}
+            <tr>
+                <td>{{ book.student_name }}</td>
+                <td>{{ book.enrollment }}</td>
+                <td>{{ book.book_name }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.issue_date }}</td>
+                <td>{{ book.expiry_date }}</td>
+                <td>
+                    {% if book.fine > 0 %}
+                        {{ book.fine }} INR
+                    {% else %}
+                        0 INR
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <h1>No books issued found</h1>
+    {% endif %}
+
+    <br><br><br><br><br><br><br><br><br>
+    {% include "library/footer.html" %}
+</body>
+</html>
